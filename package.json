@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "otp-input-react": "^0.3.0",
+    "react-phone-input-2": "^2.15.1"
+  }
+}
