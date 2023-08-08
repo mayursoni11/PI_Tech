@@ -213,11 +213,6 @@ const Header = ({ activeHeading }) => {
           </div>
           <div>
             <Link to="/">
-              {/* <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-                alt=""
-                className="mt-3 cursor-pointer"
-              /> */}
               <h1 class="text-4xl">PI Tech</h1>
             </Link>
           </div>
