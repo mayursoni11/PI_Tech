@@ -1,5 +1,5 @@
 import React from "react";
-import { AiOutlineFolderAdd, AiOutlineGift } from "react-icons/ai";
+import { AiOutlineFolderAdd, AiOutlineGift, AiOutlineMoneyCollect } from "react-icons/ai";
 import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
@@ -31,6 +31,22 @@ const DashboardSideBar = ({ active }) => {
 
       <div className="w-full flex items-center p-4">
         <Link to="/dashboard-orders" className="w-full flex items-center">
+          <AiOutlineMoneyCollect
+            size={30}
+            color={`${active === 2 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 2 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Accounts
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link to="/dashboard-orders" className="w-full flex items-center">
           <FiShoppingBag
             size={30}
             color={`${active === 2 ? "crimson" : "#555"}`}
@@ -53,7 +69,7 @@ const DashboardSideBar = ({ active }) => {
               active === 3 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Products
+            All Listings
           </h5>
         </Link>
       </div>
@@ -72,7 +88,80 @@ const DashboardSideBar = ({ active }) => {
               active === 4 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Create Product
+            Create Listing
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/dashboard-master-products"
+          className="w-full flex items-center"
+        >
+          <AiOutlineFolderAdd
+            size={30}
+            color={`${active === 4 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 4 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Product List
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/dashboard-vendor-list"
+          className="w-full flex items-center"
+        >
+          <AiOutlineFolderAdd
+            size={30}
+            color={`${active === 4 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 4 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Vendor List
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/dashboard-add-purchase"
+          className="w-full flex items-center"
+        >
+          <AiOutlineFolderAdd
+            size={30}
+            color={`${active === 4 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 4 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Purchase Bills
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link to="/dashboard-coupouns" className="w-full flex items-center">
+          <AiOutlineGift
+            size={30}
+            color={`${active === 9 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 9 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Discount Codes
           </h5>
         </Link>
       </div>
@@ -144,21 +233,7 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-coupouns" className="w-full flex items-center">
-          <AiOutlineGift
-            size={30}
-            color={`${active === 9 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 9 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Discount Codes
-          </h5>
-        </Link>
-      </div>
+      
 
       <div className="w-full flex items-center p-4">
         <Link to="/dashboard-refunds" className="w-full flex items-center">

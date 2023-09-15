@@ -31,6 +31,9 @@ import {
   ShopAllCoupouns,
   ShopPreviewPage,
   ShopAllOrders,
+  ShopAllVendors,
+  ShopAllMasterProducts,
+  ShopAddPurchase,
   ShopOrderDetails,
   ShopAllRefunds,
   ShopSettingsPage,
@@ -216,6 +219,30 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllProducts />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-vendor-list"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllVendors />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-master-products"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllMasterProducts />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-add-purchase"
+          element={
+            <SellerProtectedRoute>
+              <ShopAddPurchase />
             </SellerProtectedRoute>
           }
         />

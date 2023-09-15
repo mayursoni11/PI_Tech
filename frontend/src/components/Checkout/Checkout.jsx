@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import Select from 'react-select';
 
 const Checkout = () => {
   const { user } = useSelector((state) => state.user);
@@ -21,6 +22,11 @@ const Checkout = () => {
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
   const navigate = useNavigate();
+  const paymenttype = [
+    {value: "Complete", label: "Complete"},
+    {value: "Partial", label: "Partial"},
+    {value: "On Credit", label: "On Credit"},
+  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -60,7 +66,8 @@ const Checkout = () => {
   );
 
   // this is shipping cost variable
-  const shipping = subTotalPrice * 0.1;
+  //shipping manipulation
+  const shipping = subTotalPrice * 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,7 +145,7 @@ const Checkout = () => {
         className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
         onClick={paymentSubmit}
       >
-        <h5 className="text-white">Go to Payment</h5>
+        <h5 className="text-white">Request Approval</h5>
       </div>
     </div>
   );
@@ -312,6 +319,11 @@ const CartData = ({
   setCouponCode,
   discountPercentenge,
 }) => {
+  const paymenttype = [
+    {value: "Complete", label: "Complete"},
+    {value: "Partial", label: "Partial"},
+    {value: "On Credit", label: "On Credit"},
+  ];
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
@@ -330,6 +342,12 @@ const CartData = ({
           - {discountPercentenge ? "$" + discountPercentenge.toString() : null}
         </h5>
       </div>
+      <br />
+      <h3 className="text-[16px] font-[400] text-[#000000a4]">Payment Type:</h3>
+      <br />
+        <Select
+              className="flex-1"
+              options={paymenttype}/>
       <h5 className="text-[18px] font-[600] text-end pt-3">${totalPrice}</h5>
       <br />
       <form onSubmit={handleSubmit}>

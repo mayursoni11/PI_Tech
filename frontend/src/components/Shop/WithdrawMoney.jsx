@@ -173,7 +173,7 @@ const WithdrawMoney = () => {
                   </div>
                   <div className="pt-2">
                     <label>
-                      Bank Swift Code <span className="text-red-500">*</span>
+                      Bank IFSC Code <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"

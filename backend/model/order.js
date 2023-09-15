@@ -31,6 +31,12 @@ const orderSchema = new mongoose.Schema({
         type:{
             type: String,
         },
+        paymenttype:{
+            type: String,
+        },
+        paidamount:{
+            type: Number,
+        },
     },
     paidAt:{
         type: Date,

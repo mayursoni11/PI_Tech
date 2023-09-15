@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { BsHandbag } from "react-icons/bs";
 import { MdOutlineLocalOffer } from "react-icons/md";
-import { AiOutlineSetting } from "react-icons/ai";
+import { AiOutlineSetting, AiOutlineCheckCircle } from "react-icons/ai";
 
 const AdminSideBar = ({ active }) => {
   return (
@@ -88,12 +88,28 @@ const AdminSideBar = ({ active }) => {
               active === 5 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Products
+            All Listings
           </h5>
         </Link>
       </div>
 
       <div className="w-full flex items-center p-4">
+        <Link to="/admin-listing-approval" className="w-full flex items-center">
+          <AiOutlineCheckCircle
+            size={30}
+            color={`${active === 5 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 5 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Listing Approval
+          </h5>
+        </Link>
+      </div>
+
+      {/* <div className="w-full flex items-center p-4">
         <Link to="/admin-events" className="w-full flex items-center">
           <MdOutlineLocalOffer
             size={30}
@@ -107,7 +123,7 @@ const AdminSideBar = ({ active }) => {
             All Events
           </h5>
         </Link>
-      </div>
+      </div> */}
 
 
 
