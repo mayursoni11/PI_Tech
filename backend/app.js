@@ -5,6 +5,13 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://pi-tech-frontend.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 app.use(cors({
   origin: ["https://pi-tech-frontend.vercel.app"],
   methods: ["POST", "GET"],
