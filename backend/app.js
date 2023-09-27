@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 app.use(cors({
-  origin: ['https://pi-tech.vercel.app',],
+  origin: ['https://pi-tech-frontend.vercel.app',],
   credentials: true,
 }));
 
