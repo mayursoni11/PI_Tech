@@ -60,6 +60,19 @@ const ProfileSidebar = ({ setActive, active }) => {
       </div>
       <div
         className="flex items-center cursor-pointer w-full mb-8"
+        onClick={() => setActive(9)}
+      >
+        <HiOutlineShoppingBag size={20} color={active === 9 ? "red" : ""} />
+        <span
+          className={`pl-3 ${
+            active === 9 ? "text-[red]" : ""
+          } 800px:block hidden`}
+        >
+          Pending Transactions
+        </span>
+      </div>
+      <div
+        className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(3)}
       >
         <HiOutlineReceiptRefund size={20} color={active === 3 ? "red" : ""} />

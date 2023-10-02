@@ -28,8 +28,6 @@ const InvoiceForm = () => {
   const [discount, setDiscount] = useState('');
   const [tax, setTax] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState(1);
-  const [cashierName, setCashierName] = useState('');
-  const [customerName, setCustomerName] = useState('');
   const [items, setItems] = useState([
     {
       id: uid(6),
@@ -38,6 +36,8 @@ const InvoiceForm = () => {
       price: '1.00',
     },
   ]);
+  const [vendorSelected, setVendorSelected] = useState('');
+  const [selectedVendorDetails, setSelectedVendorDetails] = useState('');
 
   const reviewInvoiceHandler = (event) => {
     event.preventDefault();
@@ -102,6 +102,7 @@ const InvoiceForm = () => {
   const total = subtotal - discountRate + taxRate;
 
   const allvendorlist = []
+  let selectedVendor = []
 
   vendors &&
   vendors.forEach((item) => {
@@ -111,6 +112,12 @@ const InvoiceForm = () => {
     });
   });
 
+  const handleVendorSelected = (vendorSelected) => {
+    setVendorSelected(vendorSelected)
+    selectedVendor = vendors.find(item => item._id === vendorSelected.value);
+    setSelectedVendorDetails(selectedVendor.name + "\n" + selectedVendor.email + "\n" + selectedVendor.phoneNumber + "\n" + selectedVendor.gstNumber);
+  }
+
   return (
     <form
       className="relative flex flex-col px-2 md:flex-row w-full"
@@ -119,7 +126,7 @@ const InvoiceForm = () => {
       <div className="my-6 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6">
         <div className="flex flex-col justify-between space-y-2 border-b border-gray-900/10 pb-4 md:flex-row md:items-center md:space-y-0">
           <div className="flex space-x-2">
-            <span className="font-bold">Current Date: </span>
+            <span className="font-bold">Purchase Date: </span>
             <span>{today}</span>
           </div>
           <div className="flex items-center space-x-2">
@@ -142,40 +149,25 @@ const InvoiceForm = () => {
         <h1 className="text-center text-lg font-bold">PURCHASE ENTRY</h1>
         <div className="grid grid-cols-2 gap-2 pt-4 pb-8">
           <label
-            htmlFor="cashierName"
+            htmlFor="selectedVendorDetails"
             className="text-sm font-bold sm:text-base"
-          >
-            Cashier:
-          </label>
-          <input
-            required
-            className="flex-1"
-            placeholder="Cashier name"
-            type="text"
-            name="cashierName"
-            id="cashierName"
-            value={cashierName}
-            onChange={(event) => setCashierName(event.target.value)}
-          />
-          <label
-            htmlFor="customerName"
-            className="col-start-2 row-start-1 text-sm font-bold md:text-base"
           >
             Select Vendor:
           </label>
-          <input
-            required
-            className="flex-1"
-            placeholder="Customer name"
-            type="text"
-            name="customerName"
-            id="customerName"
-            value={customerName}
-            onChange={(event) => setCustomerName(event.target.value)}
-          />
           <Select
             className="flex-1"
-            options={allvendorlist}/>
+            id="vendorselectlist"
+            options={allvendorlist}
+            value={vendorSelected}
+            onChange={handleVendorSelected}
+            />        
+          <label
+            htmlFor="selectVendor"
+            className="col-start-2 row-start-1 text-sm font-bold md:text-base"
+          >
+            Vendor Details:
+          </label>
+          <p>{selectedVendorDetails}</p>
         </div>
         <table className="w-full p-4 text-left">
           <thead>
@@ -245,8 +237,7 @@ const InvoiceForm = () => {
             setIsOpen={setIsOpen}
             invoiceInfo={{
               invoiceNumber,
-              cashierName,
-              customerName,
+              selectedVendorDetails,
               subtotal,
               taxRate,
               discountRate,

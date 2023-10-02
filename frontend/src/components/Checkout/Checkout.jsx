@@ -21,12 +21,9 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
+  const [paymentTerms, setPaymentTerms] = useState("");
+  const [partialAmt,setPartialAmt] = useState("");
   const navigate = useNavigate();
-  const paymenttype = [
-    {value: "Complete", label: "Complete"},
-    {value: "Partial", label: "Partial"},
-    {value: "On Credit", label: "On Credit"},
-  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,7 +32,10 @@ const Checkout = () => {
   const paymentSubmit = () => {
    if(address1 === "" || address2 === "" || zipCode === null || country === "" || city === ""){
       toast.error("Please choose your delivery address!")
-   } else{
+   } else if(paymentTerms.value === "Partial" && partialAmt === ""){
+    toast.error("Please enter partial payment amount!")
+   }
+  else{
     const shippingAddress = {
       address1,
       address2,
@@ -44,6 +44,7 @@ const Checkout = () => {
       city,
     };
 
+    var requestedAmt = "0";
     const orderData = {
       cart,
       totalPrice,
@@ -52,11 +53,38 @@ const Checkout = () => {
       discountPrice,
       shippingAddress,
       user,
+      requestedAmt,
     }
 
+    orderData.paymentInfo = {
+      paymentterms: paymentTerms.value,
+    };
+
+      if(paymentTerms.value === "Complete")
+      {
+        orderData.requestedAmt = totalPrice;
+      } else if(paymentTerms.value === "Partial")
+      {
+        orderData.requestedAmt = partialAmt;
+      }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios
+    .post(`${server}/order/create-order`, orderData, config)
+    .then((res) => {
+      navigate("/order/success");
+      toast.success("Order successful!");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      window.location.reload();
+    });
     // update local storage with the updated orders array
-    localStorage.setItem("latestOrder", JSON.stringify(orderData));
-    navigate("/payment");
+    //localStorage.setItem("latestOrder", JSON.stringify(orderData));
    }
   };
 
@@ -138,6 +166,10 @@ const Checkout = () => {
             couponCode={couponCode}
             setCouponCode={setCouponCode}
             discountPercentenge={discountPercentenge}
+            paymentTerms={paymentTerms}
+            setPaymentTerms={setPaymentTerms}
+            partialAmt={partialAmt}
+            setPartialAmt={setPartialAmt}
           />
         </div>
       </div>
@@ -318,12 +350,20 @@ const CartData = ({
   couponCode,
   setCouponCode,
   discountPercentenge,
+  paymentTerms,
+  setPaymentTerms,
+  partialAmt,
+  setPartialAmt,
 }) => {
   const paymenttype = [
     {value: "Complete", label: "Complete"},
     {value: "Partial", label: "Partial"},
     {value: "On Credit", label: "On Credit"},
   ];
+
+  const handlePaymentTermSelected = (paymentTerms) => {
+    setPaymentTerms(paymentTerms);
+  }
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
@@ -345,10 +385,29 @@ const CartData = ({
       <br />
       <h3 className="text-[16px] font-[400] text-[#000000a4]">Payment Type:</h3>
       <br />
-        <Select
-              className="flex-1"
-              options={paymenttype}/>
-      <h5 className="text-[18px] font-[600] text-end pt-3">${totalPrice}</h5>
+      <Select
+          className="flex-1"
+          options={paymenttype}
+          value={paymentTerms}
+          onChange={handlePaymentTermSelected}/>
+      <br />
+      {paymentTerms.value === "Partial" && (
+        <div>
+        <input
+            type="number"
+            className={`${styles.input} h-[40px] pl-2`}
+            placeholder="Partial Amount"
+            value={partialAmt}
+            onChange={(e) => setPartialAmt(e.target.value)}
+            required
+          />
+        </div>
+      )}
+      <br />
+      <div className="flex justify-between border-b pb-3">
+        <h3 className="text-[16px] font-[400] text-[#000000a4] pt-3">Total:</h3>
+        <h5 className="text-[18px] font-[600] text-end pt-3">${totalPrice}</h5>
+      </div>
       <br />
       <form onSubmit={handleSubmit}>
         <input

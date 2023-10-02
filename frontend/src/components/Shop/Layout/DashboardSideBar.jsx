@@ -145,6 +145,25 @@ const DashboardSideBar = ({ active }) => {
               active === 4 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
+            Purchase Entry
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/dashboard-add-purchase"
+          className="w-full flex items-center"
+        >
+          <AiOutlineFolderAdd
+            size={30}
+            color={`${active === 4 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 4 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
             Purchase Bills
           </h5>
         </Link>

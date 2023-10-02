@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../redux/actions/product";
 import { categoriesData } from "../../static/data";
 import { toast } from "react-toastify";
+import {getAllMasterProductsShop} from '../../redux/actions/masterproduct';
+import Select from 'react-select';
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -20,7 +22,25 @@ const CreateProduct = () => {
   const [originalPrice, setOriginalPrice] = useState();
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
+  const {mproducts, isLoading} = useSelector((state) => state.masterproduct);
+  const [itemSelected, setItemSelected] = useState('');
 
+  useEffect(() => {
+    dispatch(getAllMasterProductsShop(seller._id));
+  }, [dispatch]);
+
+  const allproductlist =[];
+  mproducts &&
+  mproducts.forEach((item) => {
+    allproductlist.push({
+      value: item._id,
+      label: item.name,
+    });
+  });
+
+  const handleItemSelected = (itemSelected) => {
+    setItemSelected(itemSelected);
+  }
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -86,9 +106,20 @@ const CreateProduct = () => {
       {/* create product form */}
       <form onSubmit={handleSubmit}>
         <br />
+        <div className="pb-4">
+          <label className="pb-2">
+            Select Product <span className="text-red-500">*</span>
+          </label>
+          <Select
+            className="mt-2 appearance-none block w-full px-3 h-[35px] rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            options={allproductlist}
+            value={itemSelected}
+            onChange= {handleItemSelected}
+            />
+        </div>
         <div>
           <label className="pb-2">
-            Name <span className="text-red-500">*</span>
+            Listing Name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -102,7 +133,7 @@ const CreateProduct = () => {
         <br />
         <div>
           <label className="pb-2">
-            Description <span className="text-red-500">*</span>
+            Listing Description <span className="text-red-500">*</span>
           </label>
           <textarea
             cols="30"

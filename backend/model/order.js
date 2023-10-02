@@ -17,9 +17,14 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    requestedAmt:{
+        type: Number,
+        required: true,
+        default: 0,
+    },
     status:{
         type: String,
-        default: "Processing",
+        default: "Approval Pending",
     },
     paymentInfo:{
         id:{
@@ -31,7 +36,7 @@ const orderSchema = new mongoose.Schema({
         type:{
             type: String,
         },
-        paymenttype:{
+        paymentterms:{
             type: String,
         },
         paidamount:{
@@ -40,7 +45,6 @@ const orderSchema = new mongoose.Schema({
     },
     paidAt:{
         type: Date,
-        default: Date.now(),
     },
     deliveredAt: {
         type: Date,

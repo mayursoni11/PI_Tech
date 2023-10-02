@@ -126,10 +126,10 @@ const InvoiceModal = ({
                   <div className="mb-4 grid grid-cols-2">
                     <span className="font-bold">Invoice Number:</span>
                     <span>{invoiceInfo.invoiceNumber}</span>
-                    <span className="font-bold">Cashier:</span>
-                    <span>{invoiceInfo.cashierName}</span>
-                    <span className="font-bold">Customer:</span>
-                    <span>{invoiceInfo.customerName}</span>
+                    <span className="font-bold">Vendor Details:</span>
+                    <span>{invoiceInfo.selectedVendorDetails}</span>
+                    {/* <span className="font-bold">Customer:</span>
+                    <span>{invoiceInfo.customerName}</span> */}
                   </div>
 
                   <table className="w-full text-left">

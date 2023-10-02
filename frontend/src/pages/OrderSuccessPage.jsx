@@ -1,10 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 // import Lottie from "react-lottie";
 import animationData from "../Assests/animations/107043-success.json";
 
 const OrderSuccessPage = () => {
+  const navigate = useNavigate();
+  setTimeout(() =>{
+    navigate("/profile");
+    window.location.reload();
+  }, 4000);
+
   return (
     <div>
       <Header />
@@ -23,6 +30,7 @@ const Success = () => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
+
   return (
     <div>
       {/* <Lottie options={defaultOptions} width={300} height={300} /> */}
