@@ -7,7 +7,7 @@ import color from "@/shared/constans/colors";
 import {styles} from './styles'
 
 
-export default function SliderAds() {
+export default function SliderAds() { 
   const ads = [
     {
       id: '1',

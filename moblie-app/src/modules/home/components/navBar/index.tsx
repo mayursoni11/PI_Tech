@@ -9,7 +9,8 @@ import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
 
-export default function NavBar({openSearch, goToBag}: {openSearch: any, goToBag: any}) {
+export default function NavBar({ openSearch, goToBag, profileUser }: { openSearch: any, goToBag: any, profileUser: any }) {
+
 
   return (
     <View style={styles.container}>
@@ -21,14 +22,14 @@ export default function NavBar({openSearch, goToBag}: {openSearch: any, goToBag:
           value="Good day for shopping," />
         <Typography
           customStyle={styles.nameUser}
-          value="Arfi Maulana" />
+          value={profileUser.name ?? ''} />
       </View>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity onPress={openSearch}>
           <SearchNormal width={28} height={28} />
         </TouchableOpacity>
-        <View style={{marginHorizontal: normalize(12)}} />
-        <TouchableOpacity onPress={goToBag} style={{position: 'relative'}}>
+        <View style={{ marginHorizontal: normalize(12) }} />
+        <TouchableOpacity onPress={goToBag} style={{ position: 'relative' }}>
           <Bag width={28} height={28} />
           <View style={{
             backgroundColor: color.neutral.white,

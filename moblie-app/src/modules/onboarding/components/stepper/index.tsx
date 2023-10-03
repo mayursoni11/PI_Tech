@@ -3,9 +3,12 @@ import Typography from "@/shared/components/Typography";
 import { ImageOne, ImageTwo, ImageTree } from "./assets";
 import {_styles} from './styles'
 import { normalize } from "@/shared/helpers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import color from "@/shared/constans/colors";
 import useDarkMode from "@/shared/hooks/useDarkMode";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationProp } from "@react-navigation/native";
 
 const STEPS = [
   {
@@ -27,7 +30,31 @@ const STEPS = [
     image: ImageTree
   },
 ]
-export default function Stepper() {
+
+
+type RootStackParamList = {
+  forgotPassword: undefined;
+  login: undefined
+  home: undefined
+};
+interface LoginProps {
+  navigation: NavigationProp<RootStackParamList, 'forgotPassword' | 'login' | 'home'>;
+}
+export default function Stepper({navigation}:LoginProps) { 
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('my-key');
+      if (value !== null) {
+        console.log(navigation);
+        // navigation.replace('home')
+      }
+    } catch (e) {
+      // navigation.replace('login')
+    }
+  };
+  useEffect(()=>{
+    getData();
+  })
   const {isDarkMode} = useDarkMode()
   const [currentIndex, setCurrentIndex] = useState(0);
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

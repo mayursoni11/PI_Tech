@@ -6,8 +6,8 @@ import {
 } from "react-native";
 import { normalize } from "@/shared/helpers";
 import color from "@/shared/constans/colors";
-import React, { useState } from "react";
-import {_styles} from './styles'
+import React, { useEffect, useState } from "react";
+import { _styles } from './styles'
 import useDarkMode from "@/shared/hooks/useDarkMode";
 import PopularBrands from "@/modules/home/components/popularBrands";
 import NavBar from "@/modules/home/components/navBar";
@@ -19,29 +19,43 @@ import ProductList from "@/shared/components/productList";
 import HeroBackground from "@/shared/components/heroBackground";
 import Balance from "@/shared/components/balance";
 import { products } from "@/shared/constans/mockup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface HomeProps {
   navigation: NavigationProps;
 }
-export default function Home({navigation}: HomeProps) {
+export default function Home({ navigation }: HomeProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const {isDarkMode} = useDarkMode()
+  const { isDarkMode } = useDarkMode()
   const styles = _styles(isDarkMode)
+  const [profileUser, setProfileUser] = useState({})
 
+  const getToken = async () => {
+    try {
+      const username = await AsyncStorage.getItem('user_name');
+      setProfileUser({
+        name:username
+      })
+    } catch (e) {
+    }
+  };
+  useEffect(() => {
+    getToken()
+  }, [])
   function goToBag() {
     navigation.navigate('bag')
   }
   return (
-    <View style={{flex: 1}}>
-      <ScrollView bounces={false} bouncesZoom={false} showsVerticalScrollIndicator={false} style={{flex: 1, backgroundColor: color.main.blue}}>
+    <View style={{ flex: 1 }}>
+      <ScrollView bounces={false} bouncesZoom={false} showsVerticalScrollIndicator={true} style={{ flex: 1, backgroundColor: color.main.blue }}>
         <HeroBackground>
-          <NavBar goToBag={goToBag} openSearch={() => setIsOpen(!isOpen)} />
+          <NavBar profileUser={profileUser} goToBag={goToBag} openSearch={() => setIsOpen(!isOpen)} />
           <Balance />
           <PopularBrands />
         </HeroBackground>
         <View style={styles.body}>
           <SliderAds />
-          <View style={{marginTop: normalize(16)}}>
+          <View style={{ marginTop: normalize(16) }}>
             <Typography
               customStyle={styles.title}
               value="Popular" />
@@ -51,7 +65,7 @@ export default function Home({navigation}: HomeProps) {
         </View>
       </ScrollView>
       <ButtonSheet height={Dimensions.get('window').height * 0.9} dispatch={isOpen}>
-        <Filter setIsOpen={setIsOpen} isOpen={isOpen}/>
+        <Filter setIsOpen={setIsOpen} isOpen={isOpen} />
       </ButtonSheet>
     </View>
   )

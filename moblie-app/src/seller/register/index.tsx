@@ -9,8 +9,8 @@ import Button from "@/shared/components/buttons/normal";
 import CheckBox from "@/shared/components/checkbox";
 import { NavigationProp } from "@react-navigation/native";
 import { useState } from "react";
-import { registerUrl } from "@/apis";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { registerUrl, sellerCreateShopUrl } from "@/apis";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { AddBlue } from "@/shared/assets/icons";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useRef } from "react";
@@ -23,21 +23,23 @@ interface RegisterProps {
   navigation: NavigationProp<RootStackParamList, 'confirmEmail'>;
 }
 
-type User = {
+type Seller = {
   firstName: string
   lastName: string
-  // username: string
-  // phoneNumber: number
+  zipCode: string
+  address: string
+  phoneNumber: number
   email: string
   password: string
   agree: boolean
 }
-export default function Register({ navigation }: RegisterProps) {
-  const [user, setUser] = useState<User>({
+export default function SellerRegister({ navigation }: RegisterProps) {
+  const [seller, setSeller] = useState<Seller>({
     firstName: '',
     lastName: '',
-    // username: '',
-    // phoneNumber: 0,
+    zipCode: '',
+    address: '',
+    phoneNumber: 0,
     email: '',
     password: '',
     agree: false
@@ -48,18 +50,14 @@ export default function Register({ navigation }: RegisterProps) {
   const [setSelectImageBase64, setSetSelectImageBase64] = useState('')
 
   const handleChangeInput = (key: string, value: string | number | boolean) => {
-    setUser({
-      ...user,
+    setSeller({
+      ...seller,
       [key]: value,
     });
   }
 
   const uploadProfileImage = () => {
     const options = {
-      // storageOptions: {
-      //   path: 'image',
-      //   includeBase64: true
-      // },
       mediaType: 'photo',
       includeBase64: true
     }
@@ -73,17 +71,19 @@ export default function Register({ navigation }: RegisterProps) {
 
   const handleRegisterSubmit = async (e: any) => {
     e.preventDefault();
-    const convert_to_array = setSelectImageBase64?.split(' ');
-    const newUser = {
-      name: `${user.firstName} ${user.lastName}`,
-      email: user.email,
-      password: user.password,
+    const newSeller = {
+      name: `${seller.firstName} ${seller.lastName}`,
+      email: seller.email,
+      phoneNumber: seller.phoneNumber,
+      zipCode: seller.zipCode,
+      address: seller.address,
+      password: seller.password,
       avatar: `data:image/jpeg;base64,${setSelectImageBase64}`
     }
     setLoading(true);
-    const response = await (await fetch(registerUrl, {
+    const response = await (await fetch(sellerCreateShopUrl, {
       method: 'POST',
-      body: JSON.stringify(newUser),
+      body: JSON.stringify(newSeller),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -107,7 +107,7 @@ export default function Register({ navigation }: RegisterProps) {
       <View style={{ flex: 1, paddingHorizontal: normalize(24), marginTop: normalize(20) }}>
         <BackBtn />
         <View style={{ marginVertical: normalize(24) }}>
-          <TitleScreen value="Let’s create your account" />
+          <TitleScreen value="Let’s create your Seller account" />
         </View>
         <TouchableOpacity style={{
           justifyContent: 'center',
@@ -124,38 +124,34 @@ export default function Register({ navigation }: RegisterProps) {
             source={{ uri: setSelectImage == '' ? 'https://i.ibb.co/Y70KDJ8/Avatar-12.png' : setSelectImage }}
           />
         </TouchableOpacity>
-        {/* <View style={{ marginVertical: normalize(24) }}>
-          <TouchableOpacity onPress={uploadProfileImage} style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'gray',
-            width: '30%',
-          }}>
-            <View>
-              <Text><AddBlue /></Text>
-            </View>
-          </TouchableOpacity>
-        </View> */}
-
         <View style={{ flex: 0.8 }}>
           <View style={{ flexDirection: 'row', marginBottom: normalize(16), alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ flex: 0.48 }}>
-              <Input value={user.firstName} label="First Name" onChange={(e: any) => handleChangeInput('firstName', e)} />
+              <Input value={seller.firstName} label="First Name" onChange={(e: any) => handleChangeInput('firstName', e)} />
             </View>
             <View style={{ flex: 0.48 }}>
-              <Input value={user.lastName} label="Last Name" onChange={(e: any) => handleChangeInput('lastName', e)} />
+              <Input value={seller.lastName} label="Last Name" onChange={(e: any) => handleChangeInput('lastName', e)} />
             </View>
           </View>
-          {/* <Input value={user.username} label="Username" onChange={(e: any) => handleChangeInput('username', e)} />
-          <View style={{ marginBottom: normalize(16) }} />
-          <Input value={user.phoneNumber} label="Phone Number" onChange={(e: any) => handleChangeInput('phoneNumber', e)} /> */}
-          <View style={{ marginBottom: normalize(16) }} />
-          <Input value={user.email} label="Email" onChange={(e: any) => handleChangeInput('email', e)} />
-          <View style={{ marginBottom: normalize(16) }} />
-          <Input value={user.password} label="Password" secureTextEntry={true} onChange={(e: any) => handleChangeInput('password', e)} />
-
+          <View style={{ flexDirection: 'row', marginBottom: normalize(16), alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 0.48 }}>
+              <Input value={seller.zipCode} label="ZipCode" onChange={(e: any) => handleChangeInput('zipCode', e)} />
+            </View>
+            <View style={{ flex: 0.48 }}>
+              <Input value={seller.phoneNumber} label="Phone Number" onChange={(e: any) => handleChangeInput('phoneNumber', e)} />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', marginBottom: normalize(16), alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 0.48 }}>
+              <Input value={seller.email} label="Email" onChange={(e: any) => handleChangeInput('email', e)} />
+            </View>
+            <View style={{ flex: 0.48 }}>
+              <Input value={seller.address} label="Address" onChange={(e: any) => handleChangeInput('address', e)} />
+            </View>
+          </View>
+          <Input value={seller.password} label="Password" secureTextEntry={true} onChange={(e: any) => handleChangeInput('password', e)} />
           <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: normalize(10) }}>
-            <CheckBox agree={user.agree} onToggleTerms={(e: any) => handleChangeInput('agree', !user.agree)} />
+            <CheckBox agree={seller.agree} onToggleTerms={(e: any) => handleChangeInput('agree', !seller.agree)} />
             <Typography customStyle={{ marginLeft: normalize(10) }} value="I agree to Tuks’s Privacy Policy and Terms of Use" />
           </View>
         </View>

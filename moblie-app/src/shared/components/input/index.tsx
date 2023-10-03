@@ -8,7 +8,7 @@ import { normalize } from "@/shared/helpers";
 
 interface InputProps {
   placeholder?: string | undefined;
-  value: string;
+  value: string | number | boolean;
   onChange?: ((text: string) => void) | undefined;
   Icon?: React.JSXElementConstructor<any>;
   IconRight?: React.JSXElementConstructor<any>;

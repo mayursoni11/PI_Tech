@@ -8,27 +8,33 @@ import { NavigationProp } from "@react-navigation/native";
 type RootStackParamList = {
   login: undefined;
   register: undefined;
+  sellerRegister:undefined
 };
 interface OnboardingProps {
-  navigation:  NavigationProp<RootStackParamList, 'login' | 'register'>;
+  navigation: NavigationProp<RootStackParamList, 'login' | 'register' | 'sellerRegister'>;
 }
 
-export default function Onboarding({navigation}: OnboardingProps) {
+export default function Onboarding({ navigation }: OnboardingProps) {
   function goToLogin() {
     navigation.navigate('login')
   }
   function goToRegister() {
     navigation.navigate('register')
   }
+  function goToSellerRegister() {
+    navigation.navigate('sellerRegister');
+  }
   return (
     <Wrapper>
-      <View style={{flex: 1, paddingHorizontal: normalize(24)}}>
-        <View style={{flex: 0.8}}>
-         <Stepper />
+      <View style={{ flex: 1, paddingHorizontal: normalize(24) }}>
+        <View style={{ flex: 0.8 }}>
+          <Stepper />
         </View>
-        <View style={{flex: 0.2}}>
+        <Button onPress={goToSellerRegister} title="Create Seller Account" />
+        <View style={{ flex: 0.2 }}>
+          <View style={{ marginVertical: normalize(8) }} />
           <Button onPress={goToRegister} title="Create account" />
-          <View style={{marginVertical: normalize(8)}} />
+          <View style={{ marginVertical: normalize(8) }} />
           <Button onPress={goToLogin} isPrimary={false} title="Sign in" />
         </View>
       </View>

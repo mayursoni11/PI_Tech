@@ -10,6 +10,7 @@ import useDarkMode from "@/shared/hooks/useDarkMode";
 import Button from "@/shared/components/buttons/normal";
 import { NavigationProps } from "@/shared/routes/stack";
 import TitleSection from "@/shared/components/titleSection";
+import { removeToken } from "@/apis/storageToken";
 
 interface ProfileProps {
   navigation: NavigationProps
@@ -17,6 +18,11 @@ interface ProfileProps {
 export default function Profile({ navigation }: ProfileProps) {
   const { isDarkMode } = useDarkMode()
   const styles = _styles(isDarkMode);
+
+  const userLogout=()=>{
+    removeToken();
+    navigation.replace('login');
+  }
   function goToOrder(){
     navigation.navigate('sellerList');
   }
@@ -99,7 +105,7 @@ export default function Profile({ navigation }: ProfileProps) {
           </View>
         </View>
         <View style={{ marginVertical: normalize(20) }}>
-          <Button title="Logout" isPrimary={false} />
+          <Button onPress={userLogout} title="Logout" isPrimary={false} />
         </View>
       </View>
     </ScrollView>

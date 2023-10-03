@@ -17,6 +17,7 @@ import EditProfile from "@/modules/profile/sections/editProfile";
 import Order from "@/modules/order";
 import { SellerList } from "@/modules/sellerList";
 import SellerProfile from "@/modules/sellerList/sections/editProfile";
+import SellerRegister from "@/seller/register";
 
 export type RootStackParamList = {
   splashScreen: undefined
@@ -25,13 +26,14 @@ export type RootStackParamList = {
   forgotPassword: undefined
   changePassword: undefined
   register: undefined
+  sellerRegister: undefined
   confirmEmail: undefined
   productDetail: { product: ProductDTO };
   home: undefined
   bag: undefined
-  order:undefined
-  sellerList:undefined
-  sellerProfile:undefined
+  order: undefined
+  sellerList: undefined
+  sellerProfile: undefined
   orderReview: undefined
   editProfile: undefined
 };
@@ -73,6 +75,11 @@ const RoutesStack: RouteItem[] = [
   {
     path: 'register',
     component: Register,
+    private: false,
+  },
+  {
+    path: 'sellerRegister',
+    component: SellerRegister,
     private: false,
   },
   {
