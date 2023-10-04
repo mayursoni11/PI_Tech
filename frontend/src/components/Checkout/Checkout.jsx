@@ -56,9 +56,7 @@ const Checkout = () => {
       requestedAmt,
     }
 
-    orderData.paymentInfo = {
-      paymentterms: paymentTerms.value,
-    };
+    orderData.paymentterms = paymentTerms.value;
 
       if(paymentTerms.value === "Complete")
       {

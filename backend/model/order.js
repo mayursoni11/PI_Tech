@@ -26,6 +26,21 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: "Approval Pending",
     },
+    subTotalPrice:{
+        type: Number
+    },
+    shipping:{
+        type: Number
+    },
+    shippigservice:{
+        type: String
+    },
+    discountPrice:{
+        type: Number
+    },
+    paymentterms:{
+        type: String,
+    },
     paymentInfo:{
         id:{
             type: String,
@@ -36,15 +51,12 @@ const orderSchema = new mongoose.Schema({
         type:{
             type: String,
         },
-        paymentterms:{
-            type: String,
-        },
         paidamount:{
             type: Number,
         },
-    },
-    paidAt:{
-        type: Date,
+        paidAt:{
+            type: Date,
+        },
     },
     deliveredAt: {
         type: Date,

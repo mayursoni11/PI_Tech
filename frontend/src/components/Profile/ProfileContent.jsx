@@ -247,6 +247,28 @@ const AllOrders = () => {
     },
 
     {
+    field: "Payment",
+    minWidth: 150,
+    headerName: "",
+    type: "number",
+    sortable: false,
+    renderCell: (params) => {
+      //localStorage.setItem("latestOrder", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify(params.row.orderdetails));
+      return(        
+        <>
+        {params && params.row.status === "Approved for Payment" && (<Link to={`/payment`}>
+            <Button>
+              Pay Invoice
+            </Button>
+          </Link>)} 
+        </>
+      );
+    }, 
+    
+    },
+
+    {
       field: " ",
       flex: 1,
       minWidth: 150,
@@ -276,6 +298,7 @@ const AllOrders = () => {
         itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
         status: item.status,
+        orderdetails: item,
       });
     });
 

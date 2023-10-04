@@ -52,6 +52,7 @@ const Payment = () => {
   };
 
   const order = {
+    id: orderData?._id,
     cart: orderData?.cart,
     shippingAddress: orderData?.shippingAddress,
     user: user && user,
@@ -160,19 +161,41 @@ const Payment = () => {
     };
 
     order.paymentInfo = {
+      status: "succeeded",
       type: "Cash On Delivery",
+      paidamount: order.requestedAmt,
+      paidAt: Date.now(),
     };
-
+    order.status = "Order Placed";
+    order.requestedAmt = order.totalPrice - order.requestedAmt;
     await axios
-    .post(`${server}/order/create-order`, order, config)
-    .then((res) => {
-      setOpen(false);
-      navigate("/order/success");
-      toast.success("Order successful!");
-      localStorage.setItem("cartItems", JSON.stringify([]));
-      localStorage.setItem("latestOrder", JSON.stringify([]));
-      window.location.reload();
-    });
+      .put(
+        `${server}/order/update-order-status/${order.id}`,
+        {
+          order,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrder", JSON.stringify([]));
+        toast.success("Order updated!");
+        navigate("/profile");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+
+    // await axios
+    // .post(`${server}/order/create-order`, order, config)
+    // .then((res) => {
+    //   setOpen(false);
+    //   navigate("/order/success");
+    //   toast.success("Order successful!");
+    //   localStorage.setItem("cartItems", JSON.stringify([]));
+    //   localStorage.setItem("latestOrder", JSON.stringify([]));
+    //   window.location.reload();
+    // });
   };
 
   return (
@@ -428,7 +451,7 @@ const CartData = ({ orderData }) => {
         <h5 className="text-[18px] font-[600]">{orderData?.discountPrice? "$" + orderData.discountPrice : "-"}</h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">
-        ${orderData?.totalPrice}
+        ${orderData?.requestedAmt}
       </h5>
       <br />
     </div>
