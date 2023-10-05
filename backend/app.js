@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 
 app.use(cors({
   origin: ["https://pi-tech-frontend.vercel.app"],
-  methods: ["POST", "GET"],
+  methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true,
 }));
 
