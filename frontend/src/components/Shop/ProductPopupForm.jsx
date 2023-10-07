@@ -59,7 +59,7 @@ const ProductPopupForm = ({ onClose }) => {
         <span className="absolute top-2 right-2 text-gray-600 cursor-pointer" onClick={onClose}>
           close
         </span>
-        <h2 className="text-xl font-semibold mb-4">Add Vendor</h2>
+        <h2 className="text-xl font-semibold mb-4">Add Product</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="pb-2">

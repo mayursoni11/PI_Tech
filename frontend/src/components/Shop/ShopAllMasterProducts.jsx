@@ -101,7 +101,7 @@ const AllMasterProducts = () => {
   return (
       <>
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <div className={`${styles.button}`}>
+          <div className={`${styles.button} ml-2`}>
               <Link onClick={handleOpenProductPopup}>
                 <h1 className="text-[#fff] flex items-center">
                   Add Product 

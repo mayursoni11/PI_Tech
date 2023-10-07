@@ -56,7 +56,7 @@ const DashboardSideBar = ({ active }) => {
               active === 2 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Orders
+            Orders
           </h5>
         </Link>
       </div>
@@ -69,12 +69,12 @@ const DashboardSideBar = ({ active }) => {
               active === 3 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            All Listings
+            Listings
           </h5>
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
+      {/* <div className="w-full flex items-center p-4">
         <Link
           to="/dashboard-create-product"
           className="w-full flex items-center"
@@ -91,7 +91,7 @@ const DashboardSideBar = ({ active }) => {
             Create Listing
           </h5>
         </Link>
-      </div>
+      </div> */}
 
       <div className="w-full flex items-center p-4">
         <Link
@@ -145,12 +145,12 @@ const DashboardSideBar = ({ active }) => {
               active === 4 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Purchase Entry
+            Purchase
           </h5>
         </Link>
       </div>
 
-      <div className="w-full flex items-center p-4">
+      {/* <div className="w-full flex items-center p-4">
         <Link
           to="/dashboard-add-purchase"
           className="w-full flex items-center"
@@ -167,7 +167,7 @@ const DashboardSideBar = ({ active }) => {
             Purchase Bills
           </h5>
         </Link>
-      </div>
+      </div> */}
 
       <div className="w-full flex items-center p-4">
         <Link to="/dashboard-coupouns" className="w-full flex items-center">

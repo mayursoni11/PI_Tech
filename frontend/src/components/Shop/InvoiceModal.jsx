@@ -223,7 +223,7 @@ const InvoiceModal = ({
                       d="M13 5l7 7-7 7M5 5l7 7-7 7"
                     />
                   </svg>
-                  <span>Next</span>
+                  <span>Submit</span>
                 </button>
               </div>
             </div>

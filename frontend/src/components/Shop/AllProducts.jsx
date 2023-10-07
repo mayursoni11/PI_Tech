@@ -1,6 +1,9 @@
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import styles from "../../styles/styles";
+import { IoIosArrowForward } from "react-icons/io";
+import CreateProduct from "../Shop/CreateProduct";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -11,6 +14,7 @@ import Loader from "../Layout/Loader";
 const AllProducts = () => {
   const { products, isLoading } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
+  const [isCreateListingPopupVisible, setCreateListingPopupVisible] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -21,6 +25,19 @@ const AllProducts = () => {
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
     window.location.reload();
+  };
+
+  const handleCreateListingPopup = () => {
+    setCreateListingPopupVisible(true);
+  };
+
+  const handleCloseListingPopup = () => {
+    setCreateListingPopupVisible(false);
+  };
+
+  const handleCreateListingSubmit = (formData) => {
+    // Handle form submission here, e.g., send data to a server
+    console.log('Form Data:', formData);
   };
 
   const columns = [
@@ -109,6 +126,17 @@ const AllProducts = () => {
         <Loader />
       ) : (
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
+          <div className={`${styles.button} ml-2`}>
+              <Link onClick={handleCreateListingPopup}>
+                <h1 className="text-[#fff] flex items-center">
+                  Create New Listing 
+                  <IoIosArrowForward className="ml-1" />
+                </h1>
+              </Link>
+              {isCreateListingPopupVisible && (
+                <CreateProduct onClose={handleCloseListingPopup} onSubmit={handleCreateListingSubmit} />
+              )}
+          </div>
           <DataGrid
             rows={row}
             columns={columns}

@@ -24,11 +24,13 @@ const OrderDetails = () => {
   const data = orders && orders.find((item) => item._id === id);
 
   const orderUpdateHandler = async (e) => {
+    const order = {};
+    order.status = status;
     await axios
       .put(
         `${server}/order/update-order-status/${id}`,
         {
-          status,
+          order,
         },
         { withCredentials: true }
       )
@@ -136,29 +138,30 @@ const OrderDetails = () => {
       </div>
       <br />
       <br />
-      <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
-      {data?.status !== "Processing refund" && data?.status !== "Refund Success" && (
+      
+      {data?.status !== "Processing refund" && data?.status !== "Refund Success" && data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && (
+        <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>,
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
         >
           {[
-            "Processing",
-            "Transferred to delivery partner",
-            "Shipping",
-            "Received",
-            "On the way",
+            "Approval Pending",
+            "Approved for Payment",
+            "Order Placed",
+            "Out for Delivery",
             "Delivered",
+            "Completed",
           ]
             .slice(
               [
-                "Processing",
-                "Transferred to delivery partner",
-                "Shipping",
-                "Received",
-                "On the way",
+                "Approval Pending",
+                "Approved for Payment",
+                "Order Placed",
+                "Out for Delivery",
                 "Delivered",
+                "Completed",
               ].indexOf(data?.status)
             )
             .map((option, index) => (
@@ -193,12 +196,14 @@ const OrderDetails = () => {
         ) : null
       }
 
-      <div
-        className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}
-        onClick={data?.status !== "Processing refund" ? orderUpdateHandler : refundOrderUpdateHandler}
-      >
-        Update Status
-      </div>
+      {data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && (
+        <div
+          className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}
+          onClick={data?.status !== "Processing refund" ? orderUpdateHandler : refundOrderUpdateHandler}
+        >
+          Update Status
+        </div>
+      )}
     </div>
   );
 };

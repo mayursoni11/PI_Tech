@@ -226,26 +226,7 @@ const InvoiceForm = () => {
       </div>
       <div className="basis-1/4 bg-transparent">
         <div className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
-          <button
-            className="w-full rounded-md bg-blue-500 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
-            type="submit"
-          >
-            Review Invoice
-          </button>
-          <InvoiceModal
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            invoiceInfo={{
-              invoiceNumber,
-              selectedVendorDetails,
-              subtotal,
-              taxRate,
-              discountRate,
-              total,
-            }}
-            items={items}
-            onAddNextInvoice={addNextInvoiceHandler}
-          />
+          
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <label className="text-sm font-bold md:text-base" htmlFor="tax">
@@ -293,6 +274,26 @@ const InvoiceForm = () => {
               </div>
             </div>
           </div>
+          <button
+            className="w-full rounded-md bg-green-500 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
+            type="submit"
+          >
+            SUBMIT
+          </button>
+          <InvoiceModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            invoiceInfo={{
+              invoiceNumber,
+              selectedVendorDetails,
+              subtotal,
+              taxRate,
+              discountRate,
+              total,
+            }}
+            items={items}
+            onAddNextInvoice={addNextInvoiceHandler}
+          />
         </div>
       </div>
     </form>
