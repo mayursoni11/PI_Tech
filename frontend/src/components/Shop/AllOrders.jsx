@@ -28,12 +28,23 @@ const AllOrders = () => {
     {
       field: "status",
       headerName: "Status",
-      minWidth: 130,
+      minWidth: 250,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.value === "Delivered"
-          ? "greenColor"
-          : "redColor";
+        let style;
+        if(params.row.status === "Delivered")
+        {
+          style = "text-yellow-700";
+        } else if(params.row.status === "Completed"){
+          style = "text-green-700";
+        }
+        else if(params.row.status === "Approval Pending"){
+          style = "text-red-700";
+        }
+        else if(params.row.status === "Approved for Payment"){
+          style = "text-green-700";
+        }
+        return style;
       },
     },
     {
@@ -42,9 +53,17 @@ const AllOrders = () => {
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.value === "Delivered"
-          ? "greenColor"
-          : "redColor";
+        let style;
+        if(params.row.paymenttype === "Complete")
+        {
+          style = "text-green-700";
+        } else if(params.row.paymenttype === "Partial"){
+          style = "text-yellow-700";
+        }
+        else if(params.row.paymenttype === "On Credit"){
+          style = "text-red-700";
+        }
+        return style;
       },
     },
     {
@@ -77,8 +96,13 @@ const AllOrders = () => {
               "Content-Type": "application/json",
             },
           };
-
-          const order = {status : "Approved for Payment",}
+          const order = {}
+          if(params.row.paymenttype === "On Credit")
+          {
+            order.status = "Order Placed";
+          }else {
+            order.status = "Approved for Payment";
+          }
           await axios
           .put(
             `${server}/order/update-order-status/${params.id}`,
@@ -141,6 +165,7 @@ const AllOrders = () => {
         total: "US$ " + item.totalPrice,
         status: item.status,
         orderdetails: item,
+        paymenttype: item.paymentterms,
       });
     });
 

@@ -61,7 +61,7 @@ const Checkout = () => {
       if(paymentTerms.value === "Complete")
       {
         orderData.requestedAmt = totalPrice;
-      } else if(paymentTerms.value === "Partial")
+      } else if(paymentTerms === "Partial")
       {
         orderData.requestedAmt = partialAmt;
       }
@@ -389,7 +389,7 @@ const CartData = ({
           value={paymentTerms}
           onChange={handlePaymentTermSelected}/>
       <br />
-      {paymentTerms.value === "Partial" && (
+      {paymentTerms === "Partial" && (
         <div>
         <input
             type="number"

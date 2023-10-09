@@ -11,9 +11,9 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 
 const AllMasterProducts = () => {
 
-  const [isProductPopupVisible, setProductPopupVisible] = useState(false);
   const {mproducts, isLoading} = useSelector((state) => state.masterproduct);
   const { seller } = useSelector((state) => state.seller);
+  const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -21,21 +21,13 @@ const AllMasterProducts = () => {
     dispatch(getAllMasterProductsShop(seller._id));
   }, [dispatch]);
 
-  const handleOpenProductPopup = () => {
-    setProductPopupVisible(true);
-  };
-
-  const handleCloseProductPopup = () => {
-    setProductPopupVisible(false);
-  };
-
-  const handleAddProductSubmit = (formData) => {
-    // Handle form submission here, e.g., send data to a server
-    console.log('Form Data:', formData);
+  const handleOpenProductPopup = (event) => {
+    event.preventDefault();
+    setIsOpen(true);
   };
 
   const columns = [
-    { field: "id", headerName: "Vendor ID", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Product ID", minWidth: 150, flex: 0.7 },
 
     {
       field: "name",
@@ -64,25 +56,25 @@ const AllMasterProducts = () => {
       flex: 0.8,
     },
 
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
+    // {
+    //   field: " ",
+    //   flex: 1,
+    //   minWidth: 150,
+    //   headerName: "",
+    //   type: "number",
+    //   sortable: false,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <Link to={`/order/${params.id}`}>
+    //           <Button>
+    //             <AiOutlineArrowRight size={20} />
+    //           </Button>
+    //         </Link>
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
   const row = [];
@@ -101,17 +93,15 @@ const AllMasterProducts = () => {
   return (
       <>
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
+          <Link onClick={handleOpenProductPopup}>
           <div className={`${styles.button} ml-2`}>
-              <Link onClick={handleOpenProductPopup}>
                 <h1 className="text-[#fff] flex items-center">
                   Add Product 
                   <IoIosArrowForward className="ml-1" />
                 </h1>
-              </Link>
-              {isProductPopupVisible && (
-                <ProductPopupForm onClose={handleCloseProductPopup} onSubmit={handleAddProductSubmit} />
-              )}
+                <ProductPopupForm isOpen={isOpen} setIsOpen={setIsOpen}/>          
           </div>
+          </Link>
           <DataGrid
                 rows={row}
                 columns={columns}

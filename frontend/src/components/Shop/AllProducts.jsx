@@ -14,7 +14,7 @@ import Loader from "../Layout/Loader";
 const AllProducts = () => {
   const { products, isLoading } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
-  const [isCreateListingPopupVisible, setCreateListingPopupVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -27,17 +27,9 @@ const AllProducts = () => {
     window.location.reload();
   };
 
-  const handleCreateListingPopup = () => {
-    setCreateListingPopupVisible(true);
-  };
-
-  const handleCloseListingPopup = () => {
-    setCreateListingPopupVisible(false);
-  };
-
-  const handleCreateListingSubmit = (formData) => {
-    // Handle form submission here, e.g., send data to a server
-    console.log('Form Data:', formData);
+  const handleCreateListingPopup = (event) => {
+    event.preventDefault();
+    setIsOpen(true);
   };
 
   const columns = [
@@ -126,16 +118,14 @@ const AllProducts = () => {
         <Loader />
       ) : (
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <div className={`${styles.button} ml-2`}>
+          <div className={`${styles.button} ml-2 w-[250px]`}>
               <Link onClick={handleCreateListingPopup}>
                 <h1 className="text-[#fff] flex items-center">
                   Create New Listing 
                   <IoIosArrowForward className="ml-1" />
                 </h1>
               </Link>
-              {isCreateListingPopupVisible && (
-                <CreateProduct onClose={handleCloseListingPopup} onSubmit={handleCreateListingSubmit} />
-              )}
+                <CreateProduct isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <DataGrid
             rows={row}

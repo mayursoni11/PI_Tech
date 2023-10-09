@@ -233,9 +233,9 @@ const UserOrderDetails = () => {
         </div>
       </div>
       <br />
-      <Link to="/">
+      <link to="/">
         <div className={`${styles.button} text-white`}>Send Message</div>
-      </Link>
+      </link>
       <br />
       <br />
     </div>

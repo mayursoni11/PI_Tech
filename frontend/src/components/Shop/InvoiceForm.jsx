@@ -278,7 +278,7 @@ const InvoiceForm = () => {
             className="w-full rounded-md bg-green-500 py-2 text-sm text-white shadow-sm hover:bg-blue-600"
             type="submit"
           >
-            SUBMIT
+            PREVIEW
           </button>
           <InvoiceModal
             isOpen={isOpen}

@@ -14,6 +14,7 @@ const AllVendors = () => {
   const [isVendorPopupVisible, setVendorPopupVisible] = useState(false);
   const { vendors, isLoading } = useSelector((state) => state.vendor);
   const { seller } = useSelector((state) => state.seller);
+  const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -21,17 +22,9 @@ const AllVendors = () => {
     dispatch(getAllVendorsShop(seller._id));
   }, [dispatch]);
 
-  const handleOpenVendorPopup = () => {
-    setVendorPopupVisible(true);
-  };
-
-  const handleCloseVendorPopup = () => {
-    setVendorPopupVisible(false);
-  };
-
-  const handleAddVendorSubmit = (formData) => {
-    // Handle form submission here, e.g., send data to a server
-    console.log('Form Data:', formData);
+  const handleOpenVendorPopup = (event) => {
+    event.preventDefault();
+    setIsOpen(true);
   };
 
   const columns = [
@@ -101,16 +94,14 @@ const AllVendors = () => {
   return (
       <>
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <div className={`${styles.button}`}>
+          <div className={`${styles.button} ml-2`}>
             <Link onClick={handleOpenVendorPopup}>
               <h1 className="text-[#fff] flex items-center">
                 Add Vendor 
                 <IoIosArrowForward className="ml-1" />
               </h1>
             </Link>
-            {isVendorPopupVisible && (
-              <VendorPopupForm onClose={handleCloseVendorPopup} onSubmit={handleAddVendorSubmit} />
-            )}
+              <VendorPopupForm isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <DataGrid
               rows={row}
