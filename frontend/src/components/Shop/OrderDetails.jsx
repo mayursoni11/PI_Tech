@@ -7,6 +7,8 @@ import { getAllOrdersOfShop } from "../../redux/actions/order";
 import { server } from "../../server";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { DataGrid } from "@mui/x-data-grid";
+import Loader from "../Layout/Loader";
 
 const OrderDetails = () => {
   const { orders, isLoading } = useSelector((state) => state.order);
@@ -63,6 +65,52 @@ const OrderDetails = () => {
 
   console.log(data?.status);
 
+    const columns = [
+      { field: "id", headerName: "No", minWidth: 150, flex: 0.7
+      },
+
+      {
+        field: "productname",
+        headerName: "Product Name",
+        minWidth: 250,
+        flex: 0.7,
+      },
+      {
+        field: "rate",
+        headerName: "Rate",
+        minWidth: 130,
+        flex: 0.7,
+      },
+      {
+        field: "itemsQty",
+        headerName: "Qty",
+        type: "number",
+        minWidth: 130,
+        flex: 0.7,
+      },
+
+      {
+        field: "totalrate",
+        headerName: "Total Rate",
+        type: "number",
+        minWidth: 130,
+        flex: 0.8,
+      },
+    ];
+
+    const row = [];
+
+    data &&
+    data?.cart.forEach((item) => {
+      row.push({
+        id: item._id,
+        productname: item.name,
+        rate: item.discountPrice,
+        itemsQty: item.qty,
+        totalrate: item.discountPrice * item.qty,
+      });
+    });
+
 
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
@@ -71,13 +119,13 @@ const OrderDetails = () => {
           <BsFillBagFill size={30} color="crimson" />
           <h1 className="pl-2 text-[25px]">Order Details</h1>
         </div>
-        <link to="/dashboard-orders">
+        <Link to="/dashboard-orders">
           <div
             className={`${styles.button} !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
           >
             Order List
           </div>
-        </link>
+        </Link>
       </div>
 
       <div className="w-full flex items-center justify-between pt-6">
@@ -92,24 +140,27 @@ const OrderDetails = () => {
       {/* order items */}
       <br />
       <br />
-      {data &&
-        data?.cart.map((item, index) => (
-          <div className="w-full flex items-start mb-5">
-            <img
-              src={`${item.images[0]?.url}`}
-              alt=""
-              className="w-[80x] h-[80px]"
-            />
-            <div className="w-full">
-              <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
-                US${item.discountPrice} x {item.qty}
-              </h5>
-            </div>
-          </div>
-        ))}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+          <DataGrid
+            rows={row}
+            columns={columns}
+            pageSize={10}
+            disableSelectionOnClick
+            autoHeight
+          />
+        </div>
+      )}
 
       <div className="border-t w-full text-right">
+        <h5 className="pt-3 text-[18px]">
+          CGST: <strong>US${data?.totalGst%2}</strong>
+        </h5>
+        <h5 className="pt-3 text-[18px]">
+          SGST: <strong>US${data?.totalGst%2}</strong>
+        </h5>
         <h5 className="pt-3 text-[18px]">
           Total Price: <strong>US${data?.totalPrice}</strong>
         </h5>
@@ -129,10 +180,25 @@ const OrderDetails = () => {
           <h4 className=" text-[20px]">{data?.user?.phoneNumber}</h4>
         </div>
         <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Payment Info:</h4>
+          <h4 className="pt-3 text-[20px]">Payment Type:</h4>
           <h4>
             Status:{" "}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
+            {data?.paymentterms ? data?.paymentterms : "Not Paid"}
+          </h4>
+        </div>
+        <div className="w-full 800px:w-[40%]">
+          <h4 className="pt-3 text-[20px]">Paid Amount:</h4>
+          <h4>
+            Status:{" "}
+            {data?.totalPrice - data?.requestedAmt}
+          </h4>
+        </div>
+        <div className="w-full 800px:w-[40%]">
+          <h4 className="pt-3 text-[20px]">Pending Amount:</h4>
+          <h4>
+            Status:{" "}
+            {data?.requestedAmt}<br/>
+            <u>Request Pending Payment</u>
           </h4>
         </div>
       </div>
@@ -204,6 +270,7 @@ const OrderDetails = () => {
           Update Status
         </div>
       )}
+      
     </div>
   );
 };

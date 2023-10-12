@@ -17,6 +17,10 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    totalGst:{
+        type: Number,
+        default: 0,
+    },
     requestedAmt:{
         type: Number,
         required: true,
