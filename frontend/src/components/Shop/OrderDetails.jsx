@@ -45,6 +45,37 @@ const OrderDetails = () => {
       });
   };
 
+  const handleApproveOrder = async (e) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const order = {}
+    if(data?.paymentterms === "On Credit")
+    {
+      order.status = "Order Placed";
+    }else {
+      order.status = "Approved for Payment";
+    }
+    await axios
+    .put(
+      `${server}/order/update-order-status/${data?._id}`,
+      {
+        order,
+      },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      toast.success("Order updated!");
+      navigate("/dashboard-orders");
+      window.location.reload();
+    })
+    .catch((error) => {
+      toast.error(error.response.data.message);
+    });
+  };
+
   const refundOrderUpdateHandler = async (e) => {
     await axios
     .put(
@@ -57,6 +88,33 @@ const OrderDetails = () => {
     .then((res) => {
       toast.success("Order updated!");
       dispatch(getAllOrdersOfShop(seller._id));
+    })
+    .catch((error) => {
+      toast.error(error.response.data.message);
+    });
+  }
+
+  const handleReqPendingPayment = async (e) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const order = {}
+    order.status = "Pending Payment Requested";
+    order.requestedAmt = data?.totalPrice - paidamt;
+    await axios
+    .put(
+      `${server}/order/update-order-status/${data?._id}`,
+      {
+        order,
+      },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      toast.success("Order updated!");
+      navigate("/dashboard-orders");
+      window.location.reload();
     })
     .catch((error) => {
       toast.error(error.response.data.message);
@@ -111,6 +169,14 @@ const OrderDetails = () => {
       });
     });
 
+    var paidamt = 0;
+    data &&
+    data?.paymentInfo.forEach((item) => {
+      paidamt += item.paidamount; 
+    });
+
+    //setPendingAmt(data?.totalPrice - paidAmt);
+
 
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
@@ -156,13 +222,13 @@ const OrderDetails = () => {
 
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
-          CGST: <strong>US${data?.totalGst%2}</strong>
+          CGST: <strong>{data?.totalGst%2}</strong>
         </h5>
         <h5 className="pt-3 text-[18px]">
-          SGST: <strong>US${data?.totalGst%2}</strong>
+          SGST: <strong>{data?.totalGst%2}</strong>
         </h5>
         <h5 className="pt-3 text-[18px]">
-          Total Price: <strong>US${data?.totalPrice}</strong>
+          Total Price: <strong>{data?.totalPrice}</strong>
         </h5>
       </div>
       <br />
@@ -170,37 +236,42 @@ const OrderDetails = () => {
       <div className="w-full 800px:flex items-center">
         <div className="w-full 800px:w-[60%]">
           <h4 className="pt-3 text-[20px] font-[600]">Shipping Address:</h4>
-          <h4 className="pt-3 text-[20px]">
+          <h4 className="pt-3">
             {data?.shippingAddress.address1 +
               " " +
               data?.shippingAddress.address2}
           </h4>
-          <h4 className=" text-[20px]">{data?.shippingAddress.country}</h4>
-          <h4 className=" text-[20px]">{data?.shippingAddress.city}</h4>
-          <h4 className=" text-[20px]">{data?.user?.phoneNumber}</h4>
+          <h4>{data?.shippingAddress.country}</h4>
+          <h4>{data?.shippingAddress.city}</h4>
+          <h4>{data?.user?.phoneNumber}</h4>
         </div>
         <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Payment Type:</h4>
-          <h4>
-            Status:{" "}
+          <h4 className="pt-3 text-[20px] font-[600]">Payment Type:</h4>
+          <h4 className="text-[20px]">
             {data?.paymentterms ? data?.paymentterms : "Not Paid"}
           </h4>
         </div>
         <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Paid Amount:</h4>
-          <h4>
-            Status:{" "}
-            {data?.totalPrice - data?.requestedAmt}
+          <h4 className="pt-3 text-[20px] font-[600]">Paid Amount:</h4>
+          <h4 className="text-[20px]">
+            {paidamt ? paidamt : 0}
           </h4>
         </div>
         <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Pending Amount:</h4>
-          <h4>
-            Status:{" "}
-            {data?.requestedAmt}<br/>
-            <u>Request Pending Payment</u>
+          <h4 className="pt-3 text-[20px] font-[600]">Pending Amount:</h4>
+          <h4 className="text-[20px]">
+            {data?.totalPrice - paidamt}<br/>
+            <h6 className="text-[16px] text-[red]">{(data?.totalPrice - paidamt) > 0 && data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && (<Link onClick={handleReqPendingPayment}><u>Request Pending Payment</u></Link>)}</h6>
           </h4>
         </div>
+        {data?.requestedAmt > 0 && data?.paymentterms === "Partial" &&
+        (<div className="w-full 800px:w-[40%]">
+          <h4 className="pt-3 text-[20px] font-[600]">Initial Partial Amount:</h4>
+          <h4 className="text-[20px]">
+            {data?.requestedAmt}<br/>
+          </h4>
+        </div>
+        )}
       </div>
       <br />
       <br />
@@ -262,12 +333,21 @@ const OrderDetails = () => {
         ) : null
       }
 
-      {data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && (
+      {data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && data?.status !== "Pending Payment Requested" && (
         <div
           className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}
           onClick={data?.status !== "Processing refund" ? orderUpdateHandler : refundOrderUpdateHandler}
         >
           Update Status
+        </div>
+      )}
+
+      {data?.status === "Approval Pending" && (
+        <div
+          className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[16px]`}
+          onClick={handleApproveOrder}
+        >
+          APPROVE ORDER
         </div>
       )}
       

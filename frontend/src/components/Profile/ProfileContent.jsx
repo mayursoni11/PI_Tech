@@ -257,7 +257,7 @@ const AllOrders = () => {
       localStorage.setItem("latestOrder", JSON.stringify(params.row.orderdetails));
       return(        
         <>
-        {params && params.row.status === "Approved for Payment" && (<Link to={`/payment`}>
+        {params && (params.row.status === "Approved for Payment" || params.row.status === "Pending Payment Requested") && (<Link to={`/payment`}>
             <Button>
               Pay Invoice
             </Button>

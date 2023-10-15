@@ -61,9 +61,11 @@ const Checkout = () => {
       if(paymentTerms.value === "Complete")
       {
         orderData.requestedAmt = totalPrice;
-      } else if(paymentTerms === "Partial")
+      } else if(paymentTerms.value === "Partial")
       {
         orderData.requestedAmt = partialAmt;
+      } else { 
+        orderData.requestedAmt = 0;
       }
 
     const config = {
@@ -377,7 +379,7 @@ const CartData = ({
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
         <h5 className="text-[18px] font-[600]">
-          - {discountPercentenge ? "$" + discountPercentenge.toString() : null}
+          - {discountPercentenge ? discountPercentenge.toString() : null}
         </h5>
       </div>
       <br />
@@ -389,7 +391,7 @@ const CartData = ({
           value={paymentTerms}
           onChange={handlePaymentTermSelected}/>
       <br />
-      {paymentTerms === "Partial" && (
+      {paymentTerms.value === "Partial" && (
         <div>
         <input
             type="number"

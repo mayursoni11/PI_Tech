@@ -57,6 +57,7 @@ const Payment = () => {
     shippingAddress: orderData?.shippingAddress,
     user: user && user,
     totalPrice: orderData?.totalPrice,
+    requestedAmt: orderData?.requestedAmt,
   };
 
   const onApprove = async (data, actions) => {
@@ -159,15 +160,16 @@ const Payment = () => {
         "Content-Type": "application/json",
       },
     };
-
-    order.paymentInfo = {
+    const paymentlog = {
       status: "succeeded",
       type: "Cash On Delivery",
       paidamount: order.requestedAmt,
       paidAt: Date.now(),
     };
+    order.paymentInfo =[];
+    order.paymentInfo.push(paymentlog);
     order.status = "Order Placed";
-    order.requestedAmt = order.totalPrice - order.requestedAmt;
+    order.requestedAmt = 0;
     await axios
       .put(
         `${server}/order/update-order-status/${order.id}`,
@@ -434,25 +436,52 @@ const PaymentInfo = ({
 
 const CartData = ({ orderData }) => {
   const shipping = orderData?.shipping?.toFixed(2);
+  var paidamt = 0;
+  orderData &&
+  orderData?.paymentInfo.forEach((item) => {
+    paidamt += item.paidamount; 
+  });
+
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">${orderData?.subTotalPrice}</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Total Order Value:</h3>
+        <h5 className="text-[18px] font-[600]">{orderData?.subTotalPrice}</h5>
       </div>
       <br />
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>
-        <h5 className="text-[18px] font-[600]">${shipping}</h5>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">CGST:</h3>
+        <h5 className="text-[18px] font-[600]">{orderData?.totalGst % 2}</h5>
+      </div>
+      <div className="flex justify-between">
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">SGST:</h3>
+        <h5 className="text-[18px] font-[600]">{orderData?.totalGst % 2}</h5>
+      </div>
+      <br />
+      <div className="flex justify-between">
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Shipping:</h3>
+        <h5 className="text-[18px] font-[600]">{shipping}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
-        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice? "$" + orderData.discountPrice : "-"}</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice? orderData.discountPrice : "-"}</h5>
       </div>
-      <h5 className="text-[18px] font-[600] text-end pt-3">
-        ${orderData?.requestedAmt}
-      </h5>
+      <br />
+      <div className="flex justify-between border-b pb-3">
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Net Total:</h3>
+        <h5 className="text-[18px] font-[600]">{orderData?.totalPrice}</h5>
+      </div>
+      <br />
+      <div className="flex justify-between">
+        <h3 className="text-[16px] font-[400] text-[green]">Paid Amount:</h3>
+        <h5 className="text-[18px] font-[600]">- {paidamt}</h5>
+      </div>
+      <br />
+      <div className="flex justify-between border-b pb-3">
+        <h3 className="text-[16px] font-[400] text-[red] pt-3">Current Payable Amount:</h3>
+        <h5 className="text-[18px] font-[600] text-end pt-3">{orderData?.requestedAmt}</h5>
+      </div>
       <br />
     </div>
   );

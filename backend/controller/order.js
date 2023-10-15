@@ -100,11 +100,12 @@ router.put(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const order = await Order.findById(req.params.id);
+      debugger;
 
       if (!order) {
         return next(new ErrorHandler("Order not found with this id", 400));
       }
-      if (req.body.status === "Transferred to delivery partner") {
+      if (req.body.order.status === "Transferred to delivery partner") {
         order.cart.forEach(async (o) => {
           await updateOrder(o._id, o.qty);
         });
@@ -112,12 +113,21 @@ router.put(
 
       order.status = req.body.order.status;
 
-      if(req.body.status === "Order Placed"){
-        order.paymentInfo = req.body.order.paymentInfo;
+      if(req.body.order.status === "Order Placed"){
+        if(req.body.order.paymentInfo.length > 0)
+        {
+          req.body.order.paymentInfo.forEach((item) => {
+            order.paymentInfo.push(item);
+          });
+        }
         order.requestedAmt = req.body.order.requestedAmt;
       }
 
-      if (req.body.status === "Delivered") {
+      if(req.body.order.status === "Pending Payment Requested"){
+        order.requestedAmt = req.body.order.requestedAmt;
+      }
+
+      if (req.body.order.status === "Delivered") {
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
         //const serviceCharge = order.totalPrice * .10;

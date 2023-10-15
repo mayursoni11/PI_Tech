@@ -41,7 +41,7 @@ const AllOrders = () => {
         else if(params.row.status === "Approval Pending"){
           style = "text-red-700";
         }
-        else if(params.row.status === "Approved for Payment"){
+        else if(params.row.status === "Approved for Payment" || params.row.status === "Pending Payment Requested"){
           style = "text-green-700";
         }
         return style;

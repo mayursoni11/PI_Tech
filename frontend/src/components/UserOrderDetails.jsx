@@ -220,7 +220,7 @@ const UserOrderDetails = () => {
           <h4 className="pt-3 text-[20px]">Payment Info:</h4>
           <h4>
             Status:{" "}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
+            {data?.paymentInfo[0]?.status ? data?.paymentInfo[0]?.status : "Not Paid"}
           </h4>
           <br />
            {

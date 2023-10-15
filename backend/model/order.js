@@ -45,23 +45,25 @@ const orderSchema = new mongoose.Schema({
     paymentterms:{
         type: String,
     },
-    paymentInfo:{
-        id:{
-            type: String,
-        },
-        status: {
-            type: String,
-        },
-        type:{
-            type: String,
-        },
-        paidamount:{
-            type: Number,
-        },
-        paidAt:{
-            type: Date,
-        },
-    },
+    paymentInfo:[
+        {
+            id:{
+                type: String,
+            },
+            status: {
+                type: String,
+            },
+            type:{
+                type: String,
+            },
+            paidamount:{
+                type: Number,
+            },
+            paidAt:{
+                type: Date,
+            },
+        }
+    ],
     deliveredAt: {
         type: Date,
     },
