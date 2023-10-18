@@ -276,7 +276,7 @@ const OrderDetails = () => {
       <br />
       <br />
       
-      {data?.status !== "Processing refund" && data?.status !== "Refund Success" && data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && (
+      {data?.status !== "Processing refund" && data?.status !== "Refund Success" && data?.status !== "Approval Pending" && data?.status !== "Approved for Payment" && data?.status !== "Pending Payment Requested" && (
         <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>,
         <select
           value={status}

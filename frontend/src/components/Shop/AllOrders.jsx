@@ -26,6 +26,70 @@ const AllOrders = () => {
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 
     {
+      field: "orderdate",
+      headerName: "Order Date",
+      type: "date",
+      minWidth: 130,
+      flex: 0.7,
+      valueGetter: (params) => {
+        // Convert the timestamp to a Date object
+        const timestamp = params.row.orderdate;
+        return new Date(timestamp);
+      },
+    },
+
+    {
+      field: "retailername",
+      headerName: "Retailer Name",
+      type: "text",
+      minWidth: 130,
+      flex: 0.7,
+    },
+
+    {
+      field: "paymenttype",
+      headerName: "Payment Type",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        let style;
+        if(params.row.paymenttype === "Complete")
+        {
+          style = "text-green-700";
+        } else if(params.row.paymenttype === "Partial"){
+          style = "text-yellow-700";
+        }
+        else if(params.row.paymenttype === "On Credit"){
+          style = "text-red-700";
+        }
+        return style;
+      },
+    },
+
+    {
+      field: "itemsQty",
+      headerName: "Items Qty",
+      type: "number",
+      minWidth: 130,
+      flex: 0.7,
+    },
+
+    {
+      field: "total",
+      headerName: "Total Amount",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+    {
+      field: "paidamt",
+      headerName: "Paid Amount",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+
+    {
       field: "status",
       headerName: "Status",
       minWidth: 250,
@@ -46,40 +110,6 @@ const AllOrders = () => {
         }
         return style;
       },
-    },
-    {
-      field: "paymenttype",
-      headerName: "Payment Type",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        let style;
-        if(params.row.paymenttype === "Complete")
-        {
-          style = "text-green-700";
-        } else if(params.row.paymenttype === "Partial"){
-          style = "text-yellow-700";
-        }
-        else if(params.row.paymenttype === "On Credit"){
-          style = "text-red-700";
-        }
-        return style;
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
     },
 
     {
@@ -159,13 +189,20 @@ const AllOrders = () => {
 
   orders &&
     orders.forEach((item) => {
+      var paidAmt = 0;
+      item?.paymentInfo.forEach((i) => {
+        paidAmt += i.paidamount;
+      });
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        total: item.totalPrice,
         status: item.status,
         orderdetails: item,
         paymenttype: item.paymentterms,
+        orderdate: item.createdAt,
+        retailername: item.user.name,
+        paidamt:paidAmt,
       });
     });
 
@@ -174,7 +211,7 @@ const AllOrders = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+        <div className="w-[1200px] mx-8 pt-1 mt-10 bg-white">
           <DataGrid
             rows={row}
             columns={columns}
