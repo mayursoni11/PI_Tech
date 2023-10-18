@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { server } from "../server";
 
 const SellerActivationPage = () => {
   const { activation_token } = useParams();
   const [error, setError] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (activation_token) {
       const sendRequest = async () => {
@@ -17,6 +17,10 @@ const SellerActivationPage = () => {
           })
           .then((res) => {
             console.log(res);
+            setTimeout(() =>{
+              navigate("/shop-login");
+              window.location.reload();
+            }, 4000);
           })
           .catch((err) => {
             setError(true);
@@ -39,7 +43,8 @@ const SellerActivationPage = () => {
       {error ? (
         <p>Your token is expired!</p>
       ) : (
-        <p>Your account has been created suceessfully!</p>
+        <p>Your account has been created suceessfully!<br/>
+        Redirecting to login.</p>
       )}
     </div>
   );
